@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ride-matching
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: ride-matching
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  KAFKA_TOPIC_DRIVER_LOCATIONS: "driver.locations"
+  KAFKA_TOPIC_TRIP_EVENTS: "trip.events"
+  MATCH_SEARCH_RADIUS_KM: "5.0"
+  MATCH_MAX_CANDIDATES: "10"
+  LOG_LEVEL: "INFO"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+  namespace: ride-matching
+type: Opaque
+stringData:
+  DATABASE_URL: "postgresql+asyncpg://ride_user:ride_pass@postgres:5432/ride_matching"
