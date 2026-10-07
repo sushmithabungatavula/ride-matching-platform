@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "./api";
+import Simulator from "./simulator/Simulator";
 
 const SEATTLE = { lat: 47.6062, lng: -122.3321 };
 
-export default function App() {
+function ApiConsole({ nav }) {
   const [driver, setDriver] = useState(null);
   const [rider, setRider] = useState(null);
   const [trip, setTrip] = useState(null);
@@ -55,9 +56,12 @@ export default function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>Ride Matching Dispatch</h1>
-        <p>Demo console for the FastAPI + Redis + Kafka matching service.</p>
+      <header className="console-header">
+        <div>
+          <h1>Ride Matching Dispatch</h1>
+          <p>Demo console for the FastAPI + Redis + Kafka matching service.</p>
+        </div>
+        {nav}
       </header>
 
       <section className="panel">
@@ -125,4 +129,34 @@ export default function App() {
       </section>
     </div>
   );
+}
+
+const MODES = [
+  { id: "simulation", label: "Simulation" },
+  { id: "console", label: "Live API console" },
+];
+
+const modeFromHash = () =>
+  window.location.hash === "#console" ? "console" : "simulation";
+
+export default function App() {
+  const [mode, setMode] = useState(modeFromHash);
+
+  useEffect(() => {
+    const onHash = () => setMode(modeFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const nav = (
+    <nav className="modes">
+      {MODES.map((m) => (
+        <a key={m.id} href={`#${m.id}`} aria-current={mode === m.id ? "page" : undefined}>
+          {m.label}
+        </a>
+      ))}
+    </nav>
+  );
+
+  return mode === "simulation" ? <Simulator nav={nav} /> : <ApiConsole nav={nav} />;
 }

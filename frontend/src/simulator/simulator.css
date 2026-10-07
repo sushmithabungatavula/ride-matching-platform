@@ -1,0 +1,53 @@
+.sim {
+  --bg: #f4f5f7; --panel: #ffffff; --text: #16181d; --muted: #646a76; --border: #e2e5ea;
+  --map: #eef0f3; --street: #d9dde3; --street-major: #c7ccd4; --park: #dfeedd; --water: #d6e6f5;
+  --avail: #16a34a; --enroute: #d97706; --ontrip: #2563eb; --rider: #db2777; --danger: #dc2626;
+  --accent: #111827; --accent-text: #ffffff;
+  color-scheme: light;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .sim {
+    --bg: #0d0f13; --panel: #161920; --text: #e8eaee; --muted: #8b92a0; --border: #262a33;
+    --map: #12151b; --street: #20242d; --street-major: #2c313c; --park: #15241a; --water: #132131;
+    --avail: #22c55e; --enroute: #f59e0b; --ontrip: #60a5fa; --rider: #f472b6; --danger: #f87171;
+    --accent: #e8eaee; --accent-text: #0d0f13;
+    color-scheme: dark;
+  }
+}
+.sim header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 20px 8px; }
+.sim h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
+.sim header p { margin: 0; color: var(--muted); font-size: 13px; }
+.sim .layout { display: grid; grid-template-columns: 1fr 340px; gap: 16px; padding: 8px 20px 20px; }
+.sim .mapwrap { position: relative; background: var(--map); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.sim canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+.sim .hint { position: absolute; left: 12px; top: 12px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; pointer-events: none; }
+.sim .legend { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12px; color: var(--muted); }
+.sim .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+.sim aside { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.sim .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.sim .card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 10px; font-weight: 600; }
+.sim .ctl { display: grid; grid-template-columns: 90px 1fr 52px; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; }
+.sim .ctl output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.sim input[type="range"] { width: 100%; accent-color: var(--accent); }
+.sim .btns { display: flex; gap: 8px; margin-top: 4px; }
+.sim button { flex: 1; margin: 0; border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 8px; padding: 8px 10px; font: inherit; font-weight: 550; cursor: pointer; }
+.sim button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.sim button:hover { filter: brightness(0.96); }
+.sim .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.sim .stat b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.sim .stat small { color: var(--muted); font-size: 11.5px; }
+.sim .feed { font: 11.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; height: 260px; overflow-y: auto; margin: 0; padding: 0; list-style: none; }
+.sim .feed li { padding: 3px 0; border-bottom: 1px dashed var(--border); overflow-wrap: anywhere; }
+.sim .feed .t { color: var(--muted); }
+.sim .feed .topic { display: inline-block; padding: 0 5px; border-radius: 4px; margin: 0 4px; font-size: 10.5px; background: var(--bg); border: 1px solid var(--border); }
+.sim .feed .ok { color: var(--avail); }
+.sim .feed .warn { color: var(--enroute); }
+.sim .feed .bad { color: var(--danger); }
+@media (max-width: 860px) {
+  .sim .layout { grid-template-columns: 1fr; padding: 8px 16px 16px; }
+  .sim header { padding: 14px 16px 6px; }
+}

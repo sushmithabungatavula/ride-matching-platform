@@ -2,6 +2,10 @@
 
 A distributed ride matching platform modeled on Uber's core dispatch flow. It ingests driver locations, accepts rider trip requests, matches riders to the nearest available driver, and tracks trip state through completion.
 
+**Live demo:** https://ride-matching-platform.vercel.app
+
+The demo is a browser simulation of the matching engine. Click the map to request a ride, or hit "Rush hour" to send 20 riders at once and watch concurrent requests skip drivers another request already claimed. It runs entirely client-side, so no backend is needed. The "Live API console" tab talks to the real FastAPI service when it is running.
+
 ## Architecture
 
 The system splits work across three data stores, each chosen for what it does best.
@@ -52,6 +56,18 @@ docker compose up --build
 ```
 
 This starts Postgres, Redis, Kafka, the backend on port 8000, and the frontend on port 5173. Open `http://localhost:8000/docs` for the interactive API docs, or `http://localhost:5173` for the dispatch console.
+
+## Browser simulation
+
+`frontend/src/simulator/` ports the dispatch flow from `backend/app/matching.py` to the browser:
+
+- Redis GEOSEARCH becomes a radius scan over in-memory driver positions, nearest first.
+- The Postgres `FOR UPDATE SKIP LOCKED` claim becomes a status re-check at claim time. A request whose closest candidate was taken by another request moves on to the next one, counted as "races avoided".
+- Kafka topics become the on-screen event stream.
+
+Drivers move along a street grid, so you can watch them drive to the pickup and on to the dropoff. Fleet size, search radius and simulation speed are adjustable live.
+
+Run it locally with `cd frontend && npm install && npm run dev`. It deploys to Vercel as a static Vite site with `frontend` as the root directory.
 
 ## Run the backend without Docker
 
